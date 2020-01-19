@@ -5,25 +5,18 @@ var request = require("request");
 var path = require("path");
 function main(args, bot, cID) {
     if (args.length == 0) {
-        bot.sendMessage({
-            to: cID,
-            message: 'Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```'
-        });
+        sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
+        return null;
     }
     var serverURL = args[0];
     var jsonProvider = args[1];
+    sendWaitMsg(cID, bot);
     var serverResponse = getJSON(serverURL, jsonProvider).then(function (data) { return data; });
     serverResponse.then(function (data) {
         if (jsonProvider !== null && jsonProvider !== undefined)
-            bot.sendMessage({
-                to: cID,
-                message: composeCustomJSON(data)
-            });
+            sendMsg(composeCustomJSON(data), cID, bot);
         else
-            bot.sendMessage({
-                to: cID,
-                message: composeResponse(data)
-            });
+            sendMsg(composeResponse(data), cID, bot);
     });
 }
 exports.main = main;
@@ -53,5 +46,14 @@ function composeResponse(serverProperties) {
     var playerList = (serverProperties.players.list !== null && serverProperties.players.list !== undefined) ? serverProperties.players.list.join(' \n') : 'No player list available';
     return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
         .replace("$playerlist", playerList);
+}
+function sendMsg(msg, cID, bot) {
+    bot.sendMessage({
+        to: cID,
+        message: msg
+    });
+}
+function sendWaitMsg(cID, bot) {
+    sendMsg('Acquiring data, please wait...', cID, bot);
 }
 //# sourceMappingURL=main.js.map

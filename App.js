@@ -24,7 +24,6 @@ bot.on('message', function (usr, usrID, cID, message, event) {
                 sendMsg('pong', cID);
                 break;
             case 'mcpp':
-                sendWaitMsg(cID);
                 main_1.main(args, bot, cID);
                 break;
         }
@@ -35,9 +34,6 @@ function sendMsg(msg, cID) {
         to: cID,
         message: msg
     });
-}
-function sendWaitMsg(cID) {
-    sendMsg('Acquiring data, please wait...', cID);
 }
 function logMsg(cmd, usr) {
     console.log(new Date().toLocaleDateString('en-GB') + " " + new Date().toLocaleTimeString(undefined, { hour12: false }) + " || Command requested: '" + cmd + "'; Requested by: " + usr + ";");

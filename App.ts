@@ -33,7 +33,6 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
                 break;
 
             case 'mcpp':
-                sendWaitMsg(cID);
                 mcpp(args, bot, cID);
                 break;
         }
@@ -45,10 +44,6 @@ function sendMsg(msg: string, cID: string) {
         to: cID,
         message: msg
     });
-}
-
-function sendWaitMsg(cID: string) {
-    sendMsg('Acquiring data, please wait...', cID);
 }
 
 function logMsg(cmd: string, usr: string) {

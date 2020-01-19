@@ -5,28 +5,22 @@ import * as path from "path";
 export function main(args: Array<string>, bot, cID: string) {
 
     if (args.length == 0) {
-        bot.sendMessage({
-            to: cID,
-            message: 'Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```'
-        });
+        sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
+        return null;
     }
 
     let serverURL = args[0];
     let jsonProvider = args[1];
 
+    sendWaitMsg(cID, bot);
+
     const serverResponse = getJSON(serverURL, jsonProvider).then(function(data){return data});
 
     serverResponse.then((data: string) => {
         if (jsonProvider !== null && jsonProvider !== undefined)
-            bot.sendMessage({
-                to: cID,
-                message: composeCustomJSON(data)
-            });
+            sendMsg(composeCustomJSON(data), cID, bot);
         else
-            bot.sendMessage({
-                to: cID,
-                message: composeResponse(data)
-            });
+            sendMsg(composeResponse(data), cID, bot);
     });
 }
 
@@ -64,4 +58,15 @@ function composeResponse(serverProperties) {
     return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
                                                                   .replace("$playerlist", playerList);
 
+}
+
+function sendMsg(msg: string, cID: string, bot) {
+    bot.sendMessage({
+        to: cID,
+        message: msg
+    });
+}
+
+function sendWaitMsg(cID: string, bot) {
+    sendMsg('Acquiring data, please wait...', cID, bot);
 }
