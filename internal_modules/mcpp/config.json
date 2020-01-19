@@ -1,0 +1,4 @@
+{
+  "cmd": "mcpp",
+  "defaultJSONProvider": "https://api.mcsrvstat.us/2/"
+}

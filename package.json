@@ -1,0 +1,19 @@
+{
+  "name": "ratbot-ts",
+  "version": "0.0.1",
+  "description": "",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node App.js"
+  },
+  "keywords": [],
+  "author": "ShadF0x",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^13.1.8",
+    "discord.io": "github:Woor/discord.io#gateway_v6",
+    "dotenv": "^8.2.0",
+    "request": "^2.88.0"
+  }
+}
