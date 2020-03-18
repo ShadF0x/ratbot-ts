@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var discord = require("discord.io");
-var dotenv = require("dotenv");
-//todo Maybe I can make a set of command-module programmatically or some shit
-var main_1 = require("./internal_modules/mcpp/main");
-dotenv.config();
+var dotenv_1 = require("dotenv");
+//import * as int_modules from "./internal_modules";
+//import * as mcpp from "./internal_modules/mcpp";
+var intmods = require("./internal_modules");
+dotenv_1.config();
 var bot = new discord.Client({
     token: process.env.TOKEN,
     autorun: true
@@ -20,11 +21,11 @@ bot.on('message', function (usr, usrID, cID, message, event) {
         args = args.splice(1);
         logMsg(cmd, usr);
         switch (cmd) {
-            case 'debug':
-                sendMsg('pong', cID);
+            case intmods.debug.invoker:
+                intmods.debug.call(bot, cID);
                 break;
-            case 'mcpp':
-                main_1.main(args, bot, cID);
+            case intmods.mcpp.invoker:
+                intmods.mcpp.check(args, bot, cID);
                 break;
         }
     }

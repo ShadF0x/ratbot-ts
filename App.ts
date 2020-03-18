@@ -1,10 +1,13 @@
 import * as discord from 'discord.io';
-import * as dotenv from 'dotenv';
+import {config} from "dotenv";
 
-//todo Maybe I can make a set of command-module programmatically or some shit
-import {main as mcpp} from "./internal_modules/mcpp/main";
+//import * as int_modules from "./internal_modules";
 
-dotenv.config();
+//import * as mcpp from "./internal_modules/mcpp";
+
+import * as intmods from "./internal_modules";
+
+config();
 
 let bot = new discord.Client({
     token: process.env.TOKEN,
@@ -28,24 +31,27 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
 
         switch (cmd) {
 
-            case 'debug':
-                sendMsg('pong', cID);
+            case intmods.debug.invoker:
+                intmods.debug.call(bot, cID);
                 break;
 
-            case 'mcpp':
-                mcpp(args, bot, cID);
+            case intmods.mcpp.invoker:
+                intmods.mcpp.check(args, bot, cID);
                 break;
         }
     }
 });
 
-function sendMsg(msg: string, cID: string) {
-    bot.sendMessage({
-        to: cID,
-        message: msg
-    });
-}
+
+
+// function sendMsg(msg: string, cID: string) {     //Kinda deprecated since I couldn't figure out how to return
+//     bot.sendMessage({                            //a response string from internal module.
+//         to: cID,                                 //Because of that now every module implements its own "sendMsg" if it needs to.
+//         message: msg                             //On the other hand, now I can change inner workings however I want and hopefully it won't break.
+//     });                                          //
+// }                                                //Garbage solution, I know.
 
 function logMsg(cmd: string, usr: string) {
-    console.log(`${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr};`);
+    let currentDate = new Date();
+    console.log(`${currentDate.toLocaleDateString('en-GB')} ${currentDate.toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr};`);
 }

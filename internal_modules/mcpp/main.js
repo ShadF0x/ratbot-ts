@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_1 = require("fs");
 var request = require("request");
-var path = require("path");
+var mcpp_config = require("./config.json");
 function main(args, bot, cID) {
     if (args.length == 0) {
         sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
@@ -19,11 +18,9 @@ function main(args, bot, cID) {
             sendMsg(composeResponse(data), cID, bot);
     });
 }
-exports.main = main;
-var configString = fs_1.readFileSync(path.join(__dirname, 'config.json'), 'utf-8');
-var config = JSON.parse(configString);
+exports.default = main;
 function getJSON(serverURL, JSONProviderURL) {
-    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? config.defaultJSONProvider : JSONProviderURL;
+    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? mcpp_config.defaultJSONProvider : JSONProviderURL;
     var jsonURL = JSONProviderURL + serverURL;
     return new Promise(function (resolve, reject) {
         request.get({

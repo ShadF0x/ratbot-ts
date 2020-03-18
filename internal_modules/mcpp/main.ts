@@ -1,8 +1,7 @@
-import {readFileSync as readFile} from 'fs';
 import * as request from 'request';
-import * as path from "path";
+import * as mcpp_config from "./config.json";
 
-export function main(args: Array<string>, bot, cID: string) {
+export default function main(args: Array<string>, bot, cID: string) {
 
     if (args.length == 0) {
         sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
@@ -24,12 +23,8 @@ export function main(args: Array<string>, bot, cID: string) {
     });
 }
 
-const configString = readFile(path.join(__dirname, 'config.json'), 'utf-8');
-
-const config = JSON.parse(configString);
-
 function getJSON (serverURL: string, JSONProviderURL: string) {
-    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? config.defaultJSONProvider : JSONProviderURL;
+    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? mcpp_config.defaultJSONProvider : JSONProviderURL;
     const jsonURL = JSONProviderURL + serverURL;
 
     return new Promise(function(resolve, reject) {
