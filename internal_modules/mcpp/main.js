@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request");
 var mcpp_config = require("./config.json");
-function main(args, bot, cID) {
+function main(bot, cID, args) {
     if (args.length == 0) {
         sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
         return null;

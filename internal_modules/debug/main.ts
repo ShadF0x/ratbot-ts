@@ -1,4 +1,6 @@
-export default function main(bot, cID: string) {
+import {Client} from "discord.io"
+
+export default function main(bot: Client, cID: string) {
     sendMsg("pong", cID, bot);
 }
 

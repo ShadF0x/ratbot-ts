@@ -1,11 +1,6 @@
 import * as discord from 'discord.io';
 import {config} from "dotenv";
-
-//import * as int_modules from "./internal_modules";
-
-//import * as mcpp from "./internal_modules/mcpp";
-
-import * as intmods from "./internal_modules";
+import * as plugins from "./internal_modules";
 
 config();
 
@@ -24,21 +19,15 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
     if (message.substring(0, 1) === '/') {
         let args = message.substring(1).split(' ');
         let cmd = args[0];
+        
+        let func = Object.values(plugins).filter(plugin => plugin.invoker === cmd)[0];
 
-        args = args.splice(1);
-
-        logMsg(cmd, usr);
-
-        switch (cmd) {
-
-            case intmods.debug.invoker:
-                intmods.debug.call(bot, cID);
-                break;
-
-            case intmods.mcpp.invoker:
-                intmods.mcpp.check(args, bot, cID);
-                break;
+        if (func !== null && func !== undefined) {
+            args = args.splice(1);
+            logMsg(cmd, usr, args);
+            func.run(bot, cID, args)
         }
+
     }
 });
 
@@ -51,7 +40,7 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
 //     });                                          //
 // }                                                //Garbage solution, I know.
 
-function logMsg(cmd: string, usr: string) {
+function logMsg(cmd: string, usr: string, args: Array<string>) {
     let currentDate = new Date();
-    console.log(`${currentDate.toLocaleDateString('en-GB')} ${currentDate.toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr};`);
+    console.log(`${currentDate.toLocaleDateString('en-GB')} ${currentDate.toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr}; Args: [${args}]`);
 }

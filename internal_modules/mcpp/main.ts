@@ -1,7 +1,8 @@
 import * as request from 'request';
 import * as mcpp_config from "./config.json";
+import {Client} from "discord.io";
 
-export default function main(args: Array<string>, bot, cID: string) {
+export default function main(bot: Client, cID: string, args: Array<string>) {
 
     if (args.length == 0) {
         sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
