@@ -1,6 +1,6 @@
 import * as discord from 'discord.io';
 import {config} from "dotenv";
-import * as plugins from "./internal_modules";
+import * as plugins from "./plugins";
 
 config();
 

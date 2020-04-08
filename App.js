@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var discord = require("discord.io");
 var dotenv_1 = require("dotenv");
-var plugins = require("./internal_modules");
+var plugins = require("./plugins");
 dotenv_1.config();
 var bot = new discord.Client({
     token: process.env.TOKEN,
