@@ -1,27 +1,21 @@
 import * as request from 'request';
 import * as mcpp_config from "./config.json";
-import {Client} from "discord.io";
 
-export default function main(bot: Client, cID: string, args: Array<string>) {
+export default async function main(args: Array<string>) {
 
     if (args.length == 0) {
-        sendMsg('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```', cID, bot);
-        return null;
+        return Promise.resolve('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```');
     }
 
     let serverURL = args[0];
     let jsonProvider = args[1];
 
-    sendWaitMsg(cID, bot);
+    let serverResponse = await getJSON(serverURL, jsonProvider).then(data => {return data});
 
-    const serverResponse = getJSON(serverURL, jsonProvider).then(function(data){return data});
-
-    serverResponse.then((data: string) => {
-        if (jsonProvider !== null && jsonProvider !== undefined)
-            sendMsg(composeCustomJSON(data), cID, bot);
-        else
-            sendMsg(composeResponse(data), cID, bot);
-    });
+    if (jsonProvider !== null && jsonProvider !== undefined)
+        return Promise.resolve(composeCustomJSON(serverResponse));
+    else
+        return Promise.resolve(composeResponse(serverResponse));
 }
 
 function getJSON (serverURL: string, JSONProviderURL: string) {
@@ -54,15 +48,4 @@ function composeResponse(serverProperties) {
     return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
                                                                   .replace("$playerlist", playerList);
 
-}
-
-function sendMsg(msg: string, cID: string, bot) {
-    bot.sendMessage({
-        to: cID,
-        message: msg
-    });
-}
-
-function sendWaitMsg(cID: string, bot) {
-    sendMsg('Acquiring data, please wait...', cID, bot);
 }

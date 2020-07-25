@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mcpp = require("./mcpp");
 exports.debug = require("./debug");
+exports.mcpp = require("./mcpp");
 //# sourceMappingURL=index.js.map

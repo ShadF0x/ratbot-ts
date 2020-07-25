@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var discord = require("discord.io");
 var dotenv_1 = require("dotenv");
 var plugins = require("./plugins");
-dotenv_1.config();
+dotenv_1.config(); //initialize dotenv to load token form .env
 var bot = new discord.Client({
     token: process.env.TOKEN,
     autorun: true
@@ -20,16 +20,16 @@ bot.on('message', function (usr, usrID, cID, message, event) {
         if (func !== null && func !== undefined) {
             args = args.splice(1);
             logMsg(cmd_1, usr, args);
-            func.run(bot, cID, args);
+            func.run(args).then(function (result) { return sendMsg(result, cID); }, function (reject) { sendMsg("An error has occurred during command execution", cID); logMsg(cmd_1, usr, reject); });
         }
     }
 });
-// function sendMsg(msg: string, cID: string) {     //Kinda deprecated since I couldn't figure out how to return
-//     bot.sendMessage({                            //a response string from internal module.
-//         to: cID,                                 //Because of that now every module implements its own "sendMsg" if it needs to.
-//         message: msg                             //On the other hand, now I can change inner workings however I want and hopefully it won't break.
-//     });                                          //
-// }                                                //Garbage solution, I know.
+function sendMsg(msg, cID) {
+    bot.sendMessage({
+        to: cID,
+        message: msg
+    });
+}
 function logMsg(cmd, usr, args) {
     var currentDate = new Date();
     console.log(currentDate.toLocaleDateString('en-GB') + " " + currentDate.toLocaleTimeString(undefined, { hour12: false }) + " || Command requested: '" + cmd + "'; Requested by: " + usr + "; Args: [" + args + "]");
