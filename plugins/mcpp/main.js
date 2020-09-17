@@ -48,11 +48,11 @@ function main(args) {
                         return [2 /*return*/, Promise.resolve('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```')];
                     }
                     serverURL = args[0];
-                    jsonProvider = args[1];
+                    jsonProvider = (args[1] === null || args[1] === undefined || args[1] === "") ? mcpp_config.defaultJSONProvider : args[1];
                     return [4 /*yield*/, getJSON(serverURL, jsonProvider).then(function (data) { return data; })];
                 case 1:
                     serverResponse = _a.sent();
-                    if (jsonProvider !== null && jsonProvider !== undefined)
+                    if (jsonProvider !== mcpp_config.defaultJSONProvider)
                         return [2 /*return*/, Promise.resolve(composeCustomJSON(serverResponse))];
                     else
                         return [2 /*return*/, Promise.resolve(composeResponse(serverResponse))];
@@ -63,8 +63,7 @@ function main(args) {
 }
 exports.default = main;
 function getJSON(serverURL, JSONProviderURL) {
-    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? mcpp_config.defaultJSONProvider : JSONProviderURL;
-    let jsonURL = JSONProviderURL + serverURL;
+    var jsonURL = JSONProviderURL + serverURL;
     return new Promise(function (resolve, reject) {
         request.get({
             url: jsonURL,

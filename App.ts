@@ -10,8 +10,11 @@ let bot = new discord.Client({
 });
 
 bot.on('ready', function (evt) {
-    console.log('Connected');
-    console.log('Logged in as: %s [%s]', bot.username, bot.id);
+    let currentDate = new Date();
+    let currentDateLocal = currentDate.toLocaleDateString('en-GB');
+    let currentTime = currentDate.toLocaleTimeString(undefined, {hour12: false});
+    console.log('%s %s || Connected', currentDateLocal, currentTime);
+    console.log('%s %s || Logged in as: %s [%s]', currentDateLocal, currentTime, bot.username, bot.id);
 });
 
 bot.on('message', function (usr: string, usrID: string, cID: string, message: string, event) {
