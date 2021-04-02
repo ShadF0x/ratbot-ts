@@ -1,4 +1,5 @@
 {
   "name": "debug",
+  "description": "Debug command, for all debugging needs",
   "cmd": "ping"
 }

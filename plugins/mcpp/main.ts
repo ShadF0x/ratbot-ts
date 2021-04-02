@@ -8,18 +8,17 @@ export default async function main(args: Array<string>) {
     }
 
     let serverURL = args[0];
-    let jsonProvider = args[1];
+    let jsonProvider = (args[1] === null || args[1] === undefined || args[1] === "") ? mcpp_config.defaultJSONProvider : args[1];
 
     let serverResponse = await getJSON(serverURL, jsonProvider).then(data => {return data});
 
-    if (jsonProvider !== null && jsonProvider !== undefined)
+    if (jsonProvider !== mcpp_config.defaultJSONProvider)
         return Promise.resolve(composeCustomJSON(serverResponse));
     else
         return Promise.resolve(composeResponse(serverResponse));
 }
 
 function getJSON (serverURL: string, JSONProviderURL: string) {
-    JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? mcpp_config.defaultJSONProvider : JSONProviderURL;
     const jsonURL = JSONProviderURL + serverURL;
 
     return new Promise(function(resolve, reject) {
