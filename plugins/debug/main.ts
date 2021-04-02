@@ -1,3 +1,3 @@
 export default function main() {
-    return Promise.resolve("Pong!");
+    return Promise.resolve({'message': "Pong!"});
 }

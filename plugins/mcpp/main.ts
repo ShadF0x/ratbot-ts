@@ -40,12 +40,28 @@ function composeCustomJSON(json) {
 }
 
 function composeResponse(serverProperties) {
-    if (!serverProperties.online)
-        return 'Server is currently offline';
+    let embed = {
+        color: null,
+        description: null
+    }
+    let playerList;
 
-    let playerList = (serverProperties.players.list !== null && serverProperties.players.list !== undefined) ? serverProperties.players.list.join(' \n') : 'No player list available';
+    if (!serverProperties.online) {
+        embed.description = 'Server is currently offline';
+        embed.color = 0xe30707;
+    } else  if (serverProperties.players.list == null) {
+        embed.description = 'Server is online, but the list of players is not available';
+        embed.color = 0xf0e922;
+    } else {
+        playerList = serverProperties.players.list.join(' \n');
 
-    return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
-                                                                  .replace("$playerlist", playerList);
+        embed.description = "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
+            .replace("$playerlist", playerList);
+        embed.color = 0x07e324;
+    }
 
+    // return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
+    //                                                               .replace("$playerlist", playerList);
+
+    return {'embed': embed}
 }

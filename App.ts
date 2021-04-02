@@ -19,22 +19,27 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
     if (message.substring(0, 1) === '/') {
         let args = message.substring(1).split(' ');
         let cmd = args[0];
-        
+
         let func = Object.values(plugins).filter(plugin => plugin.invoker === cmd)[0];
 
         if (func !== null && func !== undefined) {
             args = args.splice(1);
             logMsg(cmd, usr, args);
-            func.run(args).then(result => sendMsg(result, cID), reject => {sendMsg("An error has occurred during command execution", cID); logMsg(cmd, usr, reject)})
+            func.run(args).then(result => sendMsg(result, cID), reject => {sendMsg({'message': "An error has occurred during command execution"}, cID); logMsg(cmd, usr, reject)})
         }
 
     }
 });
 
-function sendMsg(msg, cID: string) {
+function sendMsg(sendable, cID: string) {
+
     bot.sendMessage({
         to: cID,
-        message: msg
+        message: sendable.message,
+        embed: sendable.embed,
+        tts: sendable.tts,
+        nonce: sendable.nonce,
+        typing: sendable.typing
     });
 }
 

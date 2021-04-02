@@ -64,7 +64,7 @@ function main(args) {
 exports.default = main;
 function getJSON(serverURL, JSONProviderURL) {
     JSONProviderURL = (JSONProviderURL === null || JSONProviderURL === undefined) ? mcpp_config.defaultJSONProvider : JSONProviderURL;
-    let jsonURL = JSONProviderURL + serverURL;
+    var jsonURL = JSONProviderURL + serverURL;
     return new Promise(function (resolve, reject) {
         request.get({
             url: jsonURL,
@@ -81,10 +81,27 @@ function composeCustomJSON(json) {
     return 'Custom API provider designated, returning JSON: \n```$json```'.replace('$json', json);
 }
 function composeResponse(serverProperties) {
-    if (!serverProperties.online)
-        return 'Server is currently offline';
-    var playerList = (serverProperties.players.list !== null && serverProperties.players.list !== undefined) ? serverProperties.players.list.join(' \n') : 'No player list available';
-    return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
-        .replace("$playerlist", playerList);
+    var embed = {
+        color: null,
+        description: null
+    };
+    var playerList;
+    if (!serverProperties.online) {
+        embed.description = 'Server is currently offline';
+        embed.color = 0xe30707;
+    }
+    else if (serverProperties.players.list == null) {
+        embed.description = 'Server is online, but the list of players is not available';
+        embed.color = 0xf0e922;
+    }
+    else {
+        playerList = serverProperties.players.list.join(' \n');
+        embed.description = "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
+            .replace("$playerlist", playerList);
+        embed.color = 0x07e324;
+    }
+    // return "Current player count: $playercount\n```$playerlist```".replace("$playercount", serverProperties.players.online)
+    //                                                               .replace("$playerlist", playerList);
+    return { 'embed': embed };
 }
 //# sourceMappingURL=main.js.map

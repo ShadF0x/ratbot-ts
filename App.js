@@ -20,14 +20,18 @@ bot.on('message', function (usr, usrID, cID, message, event) {
         if (func !== null && func !== undefined) {
             args = args.splice(1);
             logMsg(cmd_1, usr, args);
-            func.run(args).then(function (result) { return sendMsg(result, cID); }, function (reject) { sendMsg("An error has occurred during command execution", cID); logMsg(cmd_1, usr, reject); });
+            func.run(args).then(function (result) { return sendMsg(result, cID); }, function (reject) { sendMsg({ 'message': "An error has occurred during command execution" }, cID); logMsg(cmd_1, usr, reject); });
         }
     }
 });
-function sendMsg(msg, cID) {
+function sendMsg(sendable, cID) {
     bot.sendMessage({
         to: cID,
-        message: msg
+        message: sendable.message,
+        embed: sendable.embed,
+        tts: sendable.tts,
+        nonce: sendable.nonce,
+        typing: sendable.typing
     });
 }
 function logMsg(cmd, usr, args) {

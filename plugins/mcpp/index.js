@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.invoker = exports.run = void 0;
 var main_1 = require("./main");
-exports.run = main_1.default;
+Object.defineProperty(exports, "run", { enumerable: true, get: function () { return main_1.default; } });
 var config_json_1 = require("./config.json");
-exports.invoker = config_json_1.cmd;
+Object.defineProperty(exports, "invoker", { enumerable: true, get: function () { return config_json_1.cmd; } });
 //# sourceMappingURL=index.js.map
