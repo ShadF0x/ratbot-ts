@@ -1,6 +1,0 @@
-{
-  "name": "Minecraft Player Poller",
-  "description": "A simple API interacting tool to get information about players on a specified server",
-  "cmd": "mcpp",
-  "defaultJSONProvider": "https://api.mcsrvstat.us/2/"
-}

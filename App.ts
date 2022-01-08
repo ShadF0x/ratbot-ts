@@ -1,6 +1,6 @@
 import * as discord from 'discord.io';
 import {config} from "dotenv";
-import * as plugins from "./plugins";
+const Gamedig = require('gamedig');
 
 config(); //initialize dotenv to load token form .env
 
@@ -23,18 +23,19 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
         let args = message.substring(1).split(' ');
         let cmd = args[0];
 
-        let func = Object.values(plugins).filter(plugin => plugin.invoker === cmd)[0];
-
-        if (func !== null && func !== undefined) {
-            args = args.splice(1);
-            logMsg(cmd, usr, args);
-            func.run(args).then(result => sendMsg(result, cID), reject => {sendMsg({'message': "An error has occurred during command execution"}, cID); logMsg(cmd, usr, reject)})
-        }
-
+        Gamedig.query({
+            type: cmd,
+            host: args[0]
+        }).then((state) => {
+            sendMsg(state, cID)
+        }).catch((error) => {
+            sendMsg({'message': "An error has occurred during command execution"}, cID);
+            logMsg(cmd, usr, error)
+        });
     }
 });
 
-function sendMsg(sendable, cID: string) {
+function sendMsg(sendable, cID: string) { //todo implement sendable as interface/type
 
     bot.sendMessage({
         to: cID,
@@ -48,5 +49,7 @@ function sendMsg(sendable, cID: string) {
 
 function logMsg(cmd: string, usr: string, args: Array<string>) {
     let currentDate = new Date();
-    console.log(`${currentDate.toLocaleDateString('en-GB')} ${currentDate.toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr}; Args: [${args}]`);
+    let localeDateString = currentDate.toLocaleDateString('en-GB');
+    let localeTimeString = currentDate.toLocaleTimeString(undefined, {hour12: false});
+    console.log(`${localeDateString} ${localeTimeString} || Command requested: \'${cmd}\'; Requested by: ${usr}; Args: [${args}]`);
 }
