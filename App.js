@@ -17,20 +17,36 @@ bot.on('ready', function (evt) {
 });
 bot.on('message', function (usr, usrID, cID, message, event) {
     if (message.substring(0, 1) === '/') {
-        var args = message.substring(1).split(' ');
-        var cmd_1 = args[0];
+        var args_1 = message.substring(1).split(' ');
+        var embed_1 = {
+            color: null,
+            description: null
+        };
+        sendMsg({ "message": "Processing the request, please standby" }, cID);
         Gamedig.query({
-            type: cmd_1,
-            host: args[0]
+            type: args_1[0],
+            host: args_1[1]
         }).then(function (state) {
-            sendMsg(state, cID);
+            var msg;
+            if (state.players.length === 0) {
+                msg = "Server name: " + state.name + " \n The server is currently empty";
+            }
+            else {
+                msg = "Server name: " + state.name + " \n Players: " + state.players.length;
+            }
+            embed_1.color = 0x07e324;
+            embed_1.description = msg;
+            sendMsg({ "embed": embed_1 }, cID);
         }).catch(function (error) {
-            sendMsg({ 'message': "An error has occurred during command execution" }, cID);
-            logMsg(cmd_1, usr, error);
+            embed_1.color = 0xe30707;
+            embed_1.description = "Server appears to be offline";
+            sendMsg({ "embed": embed_1 }, cID);
+            logMsg(args_1[0], usr, error);
         });
     }
 });
 function sendMsg(sendable, cID) {
+    console.log(sendable);
     bot.sendMessage({
         to: cID,
         message: sendable.message,

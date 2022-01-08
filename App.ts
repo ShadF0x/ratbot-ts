@@ -21,21 +21,40 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
 
     if (message.substring(0, 1) === '/') {
         let args = message.substring(1).split(' ');
-        let cmd = args[0];
+
+        let embed = {
+            color: null,
+            description: null
+        }
+
+        sendMsg({"message" : "Processing the request, please standby"}, cID)
 
         Gamedig.query({
-            type: cmd,
-            host: args[0]
+            type: args[0],
+            host: args[1]
         }).then((state) => {
-            sendMsg(state, cID)
+            let msg;
+            if (state.players.length === 0) {
+                msg = `Server name: ${state.name} \n The server is currently empty`;
+            } else {
+                msg = `Server name: ${state.name} \n Players: ${state.players.length}`;
+            }
+
+            embed.color = 0x07e324;
+            embed.description = msg;
+            sendMsg({"embed" : embed}, cID)
         }).catch((error) => {
-            sendMsg({'message': "An error has occurred during command execution"}, cID);
-            logMsg(cmd, usr, error)
+            embed.color = 0xe30707;
+            embed.description = "Server appears to be offline"
+            sendMsg({"embed" : embed}, cID)
+            logMsg(args[0], usr, error)
         });
     }
 });
 
 function sendMsg(sendable, cID: string) { //todo implement sendable as interface/type
+
+    console.log(sendable)
 
     bot.sendMessage({
         to: cID,
