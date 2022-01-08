@@ -20,6 +20,8 @@ bot.on('ready', function (evt) {
 bot.on('message', function (usr: string, usrID: string, cID: string, message: string, event) {
 
     if (message.substring(0, 1) === '/') {
+        sendMsg({"message": "Processing request, please standby"}, cID);
+
         let args = message.substring(1).split(' ');
         let cmd = args[0];
 
@@ -28,6 +30,7 @@ bot.on('message', function (usr: string, usrID: string, cID: string, message: st
         if (func !== null && func !== undefined) {
             args = args.splice(1);
             logMsg(cmd, usr, args);
+            // @ts-ignore
             func.run(args).then(result => sendMsg(result, cID), reject => {sendMsg({'message': "An error has occurred during command execution"}, cID); logMsg(cmd, usr, reject)})
         }
 
@@ -48,5 +51,7 @@ function sendMsg(sendable, cID: string) {
 
 function logMsg(cmd: string, usr: string, args: Array<string>) {
     let currentDate = new Date();
-    console.log(`${currentDate.toLocaleDateString('en-GB')} ${currentDate.toLocaleTimeString(undefined, {hour12: false})} || Command requested: \'${cmd}\'; Requested by: ${usr}; Args: [${args}]`);
+    let localeDateString = currentDate.toLocaleDateString('en-GB');
+    let localeTimeString = currentDate.toLocaleTimeString(undefined, {hour12: false});
+    console.log(`${localeDateString} ${localeTimeString} || Command requested: \'${cmd}\'; Requested by: ${usr}; Args: [${args}]`);
 }

@@ -17,12 +17,14 @@ bot.on('ready', function (evt) {
 });
 bot.on('message', function (usr, usrID, cID, message, event) {
     if (message.substring(0, 1) === '/') {
+        sendMsg({ "message": "Processing request, please standby" }, cID);
         var args = message.substring(1).split(' ');
         var cmd_1 = args[0];
         var func = Object.values(plugins).filter(function (plugin) { return plugin.invoker === cmd_1; })[0];
         if (func !== null && func !== undefined) {
             args = args.splice(1);
             logMsg(cmd_1, usr, args);
+            // @ts-ignore
             func.run(args).then(function (result) { return sendMsg(result, cID); }, function (reject) { sendMsg({ 'message': "An error has occurred during command execution" }, cID); logMsg(cmd_1, usr, reject); });
         }
     }
@@ -39,6 +41,8 @@ function sendMsg(sendable, cID) {
 }
 function logMsg(cmd, usr, args) {
     var currentDate = new Date();
-    console.log(currentDate.toLocaleDateString('en-GB') + " " + currentDate.toLocaleTimeString(undefined, { hour12: false }) + " || Command requested: '" + cmd + "'; Requested by: " + usr + "; Args: [" + args + "]");
+    var localeDateString = currentDate.toLocaleDateString('en-GB');
+    var localeTimeString = currentDate.toLocaleTimeString(undefined, { hour12: false });
+    console.log(localeDateString + " " + localeTimeString + " || Command requested: '" + cmd + "'; Requested by: " + usr + "; Args: [" + args + "]");
 }
 //# sourceMappingURL=App.js.map

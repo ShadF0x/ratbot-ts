@@ -1,2 +1,3 @@
 export * as debug from "./debug";
-export * as mcpp from "./mcpp"
+export * as minecraft from "./mcpp"
+export * as valheim from "./valheim"

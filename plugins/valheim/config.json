@@ -1,0 +1,6 @@
+{
+  "name": "Valheim Player Poller",
+  "description": "Get info about players on a specified Valheim server, requires vhstatus-query set up on the game's server",
+  "cmd": "valheim",
+  "vhstatusQueryURL": ""
+}

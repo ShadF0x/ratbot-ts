@@ -4,7 +4,7 @@ import * as mcpp_config from "./config.json";
 export default async function main(args: Array<string>) {
 
     if (args.length == 0) {
-        return Promise.resolve('Insufficient arguments. \nUsage: \n```/mcpp server_url [API_provider_url]```');
+        return Promise.resolve(`Insufficient arguments. \nUsage: \n\`\`\`/${mcpp_config.cmd} server_url [API_provider_url]\`\`\``);
     }
 
     let serverURL = args[0];
